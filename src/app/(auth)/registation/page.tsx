@@ -1,4 +1,5 @@
 "use client";
+import { useHandleRegisterMutation } from "@/redux/features/auth/authApi";
 import Link from "next/link";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -16,6 +17,8 @@ const Registration: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  const [setRegisterUserData] = useHandleRegisterMutation();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log("Form Data:", data);
