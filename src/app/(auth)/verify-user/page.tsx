@@ -1,25 +1,24 @@
 "use client";
-import { useHandleVerifyEmailMutation } from "@/redux/features/auth/authApi";
+import { useHandleVerifyUserMutation } from "@/redux/features/auth/authApi";
+import { setUserInfo } from "@/redux/features/auth/authSlice";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const VerifyUser = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState<number>(() => {
-    // Retrieve the remaining time from localStorage if available
-    const savedTime = localStorage.getItem("timeLeft");
-    return savedTime ? parseInt(savedTime, 10) : 180; // default to 3 minutes
-  });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [setVerificationCode, { isLoading }] = useHandleVerifyEmailMutation();
+  const [setVerificationCode, { isLoading, data: userData }] =
+    useHandleVerifyUserMutation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+  const time = searchParams.get("time");
 
-  useEffect(() => {
-    localStorage.setItem("timeLeft", timeLeft.toString());
-  }, [timeLeft]);
+  const [timeLeft, setTimeLeft] = useState(Number(time));
+
+  const dispatch = useDispatch();
 
   // Timer logic
   useEffect(() => {
@@ -75,15 +74,29 @@ const VerifyUser = () => {
           email: email!,
           verificationCode: otpCode,
         }).unwrap();
+
         toast.success("Verified Your Account ");
+        setOtp(["", "", "", ""]);
+
+        console.log({ userData });
         router.push("/profile");
       } catch (error: any) {
         toast.error(error?.data?.payload?.message);
+        setOtp(["", "", "", ""]);
         console.log(error);
       }
     }
   };
 
+  if (userData) {
+    dispatch(
+      setUserInfo({
+        name: userData?.payload?.name,
+        email: userData?.payload?.email,
+        role: userData?.payload?.role,
+      })
+    );
+  }
   // Format the time left as MM:SS
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);

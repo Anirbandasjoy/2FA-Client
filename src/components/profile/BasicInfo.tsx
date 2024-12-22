@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FcOk } from "react-icons/fc";
 import { IoIosArrowForward } from "react-icons/io";
+import Logout from "../shared/logOut/Logout";
 
 export default function BasicInfo() {
   return (
@@ -71,6 +72,9 @@ export default function BasicInfo() {
               <IoIosArrowForward className="text-xl text-gray-300" />
             </div>
           </div>
+        </div>
+        <div className="w-28 mt-10">
+          <Logout />
         </div>
       </div>
     </div>

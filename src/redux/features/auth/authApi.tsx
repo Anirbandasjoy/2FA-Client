@@ -20,7 +20,7 @@ const authApi = baseAuthApi.injectEndpoints({
       }),
     }),
 
-    handleVerifyEmail: builder.mutation<verfiyUserResponse, verifyUserRequest>({
+    handleVerifyUser: builder.mutation<verfiyUserResponse, verifyUserRequest>({
       query: ({ email, verificationCode }) => ({
         url: "/user/verify-user",
         method: "POST",
@@ -60,7 +60,7 @@ export const {
   useHandleLoginMutation,
   useHandleLogOutMutation,
   useHandleRegisterMutation,
-  useHandleVerifyEmailMutation,
+  useHandleVerifyUserMutation,
   useHandleResendVerificationCodeMutation,
 } = authApi;
 

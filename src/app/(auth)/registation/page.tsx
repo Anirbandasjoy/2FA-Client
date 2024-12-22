@@ -28,7 +28,7 @@ const Registration: React.FC = () => {
     try {
       await setRegisterUserData(data).unwrap();
       toast.success("Account created successfully");
-      router.push(`/verify-user?email=${data.email}`);
+      router.push(`/verify-user?email=${data.email}&time=180`);
     } catch (error: any) {
       toast.error(error?.data?.payload?.message || "An error occurred");
       console.error("Error:", error);

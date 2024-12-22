@@ -1,13 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserInfoState {
-  name: string;
-  email: string;
+  userInfo: {
+    name: string;
+    email: string;
+    role: string;
+  };
 }
 
 const initialState: UserInfoState = {
-  name: "",
-  email: "",
+  userInfo: JSON.parse(localStorage.getItem("userInfo") || "{}") || {
+    name: "",
+    email: "",
+    role: "",
+  },
 };
 
 const userInfoSlice = createSlice({
@@ -16,14 +22,15 @@ const userInfoSlice = createSlice({
   reducers: {
     setUserInfo: (
       state,
-      action: PayloadAction<{ name: string; email: string }>
+      action: PayloadAction<{ name: string; email: string; role: string }>
     ) => {
-      state.name = action.payload.name;
-      state.email = action.payload.email;
+      state.userInfo = action.payload;
+
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     clearUserInfo: (state) => {
-      state.name = "";
-      state.email = "";
+      state.userInfo = { name: "", email: "", role: "" };
+      localStorage.removeItem("userInfo");
     },
   },
 });
