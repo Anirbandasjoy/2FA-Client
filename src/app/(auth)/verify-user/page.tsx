@@ -1,11 +1,27 @@
 "use client";
+import { useHandleVerifyEmailMutation } from "@/redux/features/auth/authApi";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const VerifyUser = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState(180);
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    // Retrieve the remaining time from localStorage if available
+    const savedTime = localStorage.getItem("timeLeft");
+    return savedTime ? parseInt(savedTime, 10) : 180; // default to 3 minutes
+  });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [setVerificationCode, { isLoading }] = useHandleVerifyEmailMutation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
 
+  useEffect(() => {
+    localStorage.setItem("timeLeft", timeLeft.toString());
+  }, [timeLeft]);
+
+  // Timer logic
   useEffect(() => {
     if (timeLeft === 0) {
       setIsButtonDisabled(false);
@@ -19,20 +35,25 @@ const VerifyUser = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
+  // Handle OTP input change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const value = e.target.value;
     if (/[^0-9]/.test(value)) return;
+
     const updatedOtp = [...otp];
     updatedOtp[index] = value;
     setOtp(updatedOtp);
 
-    // Move focus to next input if the current one is filled
     if (value && index < otp.length - 1) {
       const nextInput = document.getElementById(`otp-input-${index + 1}`);
       nextInput?.focus();
+    }
+
+    if (updatedOtp.every((digit) => digit !== "")) {
+      handleVerifyOtp(updatedOtp.join(""));
     }
   };
 
@@ -43,6 +64,23 @@ const VerifyUser = () => {
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       const prevInput = document.getElementById(`otp-input-${index - 1}`);
       prevInput?.focus();
+    }
+  };
+
+  const handleVerifyOtp = async (otpCode: string) => {
+    if (otpCode.length === 4) {
+      // Make the API call to verify OTP here
+      try {
+        await setVerificationCode({
+          email: email!,
+          verificationCode: otpCode,
+        }).unwrap();
+        toast.success("Verified Your Account ");
+        router.push("/profile");
+      } catch (error: any) {
+        toast.error(error?.data?.payload?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -89,11 +127,20 @@ const VerifyUser = () => {
         <p className="text-gray-300 mb-6">
           We just sent an email to the address{" "}
           <span className="text-green-400 font-medium cursor-pointer hover:underline">
-            joy600508@gmail.com
+            {email}
           </span>
           . Please check your email and get the verification code.
         </p>
         <div>
+          {isLoading && (
+            <div className="flex justify-center items-center mb-5 bg-gray-900">
+              <div
+                className="w-6 h-6 border-4 border-t-green-400 border-r-transparent border-b-transparent border-l-green-400 rounded-full animate-spin"
+                role="status"
+              ></div>
+            </div>
+          )}
+
           <div className="flex justify-center items-center space-x-4 mb-6">
             {otp.map((digit, index) => (
               <input
@@ -117,6 +164,9 @@ const VerifyUser = () => {
                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             } ${isButtonDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={isButtonDisabled}
+            onClick={() => {
+              // Handle resend logic here
+            }}
           >
             Resend Verification Email
           </button>

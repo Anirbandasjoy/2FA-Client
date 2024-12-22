@@ -22,7 +22,7 @@ const authApi = baseAuthApi.injectEndpoints({
 
     handleVerifyEmail: builder.mutation<verfiyUserResponse, verifyUserRequest>({
       query: ({ email, verificationCode }) => ({
-        url: "/user/verify-email",
+        url: "/user/verify-user",
         method: "POST",
         body: { email, verificationCode },
       }),

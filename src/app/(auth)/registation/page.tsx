@@ -1,8 +1,10 @@
 "use client";
 import { useHandleRegisterMutation } from "@/redux/features/auth/authApi";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -18,11 +20,23 @@ const Registration: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const [setRegisterUserData] = useHandleRegisterMutation();
+  const [setRegisterUserData, { isLoading, data: registationResponse }] =
+    useHandleRegisterMutation();
+  const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      await setRegisterUserData(data).unwrap();
+      toast.success("Account created successfully");
+      router.push(`/verify-user?email=${data.email}`);
+    } catch (error: any) {
+      toast.error(error?.data?.payload?.message || "An error occurred");
+      console.error("Error:", error);
+    }
+    console.log("Form Data:");
   };
+
+  console.log(registationResponse);
 
   return (
     <div className="flex justify-center bg-gray-900 items-center min-h-screen px-4 sm:px-8 lg:px-0">
@@ -139,7 +153,7 @@ const Registration: React.FC = () => {
             type="submit"
             className="bg-green-600 text-gray-200  py-2 px-6 text-sm rounded-md w-full sm:w-auto"
           >
-            Continue
+            {isLoading ? "Loading..." : "Continue"}
           </button>
         </div>
       </form>
