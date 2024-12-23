@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/components/auth/loading/Loading";
 import { useHandleVerifyUserMutation } from "@/redux/features/auth/authApi";
 import { setUserInfo } from "@/redux/features/auth/authSlice";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -68,7 +69,6 @@ const VerifyUser = () => {
 
   const handleVerifyOtp = async (otpCode: string) => {
     if (otpCode.length === 4) {
-      // Make the API call to verify OTP here
       try {
         await setVerificationCode({
           email: email!,
@@ -106,6 +106,10 @@ const VerifyUser = () => {
       "0"
     )}`;
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen">

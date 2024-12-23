@@ -1,10 +1,14 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { FcOk } from "react-icons/fc";
 import { IoIosArrowForward } from "react-icons/io";
 import Logout from "../shared/logOut/Logout";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/app/store";
 
 export default function BasicInfo() {
+  const { userInfo } = useSelector((state: RootState) => state.userInfo);
   return (
     <div className="flex items-center justify-center w-full bg-gray-900 border border-gray-700 rounded-lg shadow-lg">
       <div className=" w-11/12 py-10 ">
@@ -41,7 +45,7 @@ export default function BasicInfo() {
           <div className="flex justify-between items-center hover:bg-gray-800 cursor-pointer py-4 px-4 rounded-sm border border-gray-800">
             <p className="text-gray-300">Name</p>
             <div className="flex items-center gap-3">
-              <p className="text-gray-400">Anirban das joy</p>
+              <p className="text-gray-400">{userInfo?.name}</p>
               <IoIosArrowForward className="text-xl text-gray-300" />
             </div>
           </div>
@@ -49,7 +53,7 @@ export default function BasicInfo() {
           <div className="flex justify-between items-center hover:bg-gray-800 cursor-pointer py-4 px-4 rounded-sm border border-gray-800">
             <p className="text-gray-300">Email</p>
             <div className="flex items-center gap-3">
-              <p className="text-gray-400">joy600508@gmail.com</p>
+              <p className="text-gray-400">{userInfo?.email}</p>
               <IoIosArrowForward className="text-xl text-gray-300" />
             </div>
           </div>
