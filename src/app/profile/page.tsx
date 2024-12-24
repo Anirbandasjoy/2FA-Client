@@ -6,7 +6,7 @@ import React from "react";
 const Profile = () => {
   return (
     <PribetRoute>
-      <div className="flex justify-center flex-col mt-10 space-y-10 max-w-4xl mx-auto mb-20">
+      <div className="flex justify-center px-4 sm:px-0 flex-col mt-10 space-y-10 max-w-4xl mx-auto mb-20">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-36 h-36 border-4 border-gray-700 rounded-full overflow-hidden cursor-pointer">
             <Image

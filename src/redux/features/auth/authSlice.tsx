@@ -8,12 +8,18 @@ interface UserInfoState {
   };
 }
 
+const getUserInfoFromLocalStorage = () => {
+  if (typeof window !== "undefined") {
+    const storedUserInfo = localStorage.getItem("userInfo");
+    return storedUserInfo
+      ? JSON.parse(storedUserInfo)
+      : { name: "", email: "", role: 0 };
+  }
+  return { name: "", email: "", role: 0 };
+};
+
 const initialState: UserInfoState = {
-  userInfo: JSON.parse(localStorage.getItem("userInfo") || "{}") || {
-    name: "",
-    email: "",
-    role: "",
-  },
+  userInfo: getUserInfoFromLocalStorage(),
 };
 
 const userInfoSlice = createSlice({
@@ -26,11 +32,16 @@ const userInfoSlice = createSlice({
     ) => {
       state.userInfo = action.payload;
 
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("userInfo", JSON.stringify(action.payload));
+      }
     },
     clearUserInfo: (state) => {
       state.userInfo = { name: "", email: "", role: 0 };
-      localStorage.removeItem("userInfo");
+
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("userInfo");
+      }
     },
   },
 });

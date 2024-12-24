@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function NotFoundPage() {
   return (
     <div className="flex items-center justify-center min-h-screen px-4 sm:px-0  text-white">

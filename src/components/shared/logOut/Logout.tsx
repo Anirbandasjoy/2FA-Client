@@ -1,7 +1,5 @@
 "use client";
-
 import React, { useState } from "react";
-import { RootState } from "@/redux/app/store";
 import { useHandleLogOutMutation } from "@/redux/features/auth/authApi";
 import { clearUserInfo } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
