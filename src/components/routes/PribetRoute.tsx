@@ -24,7 +24,7 @@ const PribetRoute = ({ children }: { children: React.ReactNode }) => {
         <div className="flex justify-center flex-col items-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500 mb-4"></div>
           <h1 className="text-lg">
-            Authenticating
+            Loading
             <span className="text-2xl font-semibold">
               <span className="dot-animation">.</span>
               <span className="dot-animation">.</span>
