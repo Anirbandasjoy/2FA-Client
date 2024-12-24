@@ -4,7 +4,7 @@ interface UserInfoState {
   userInfo: {
     name: string;
     email: string;
-    role: string;
+    role: number;
   };
 }
 
@@ -22,14 +22,14 @@ const userInfoSlice = createSlice({
   reducers: {
     setUserInfo: (
       state,
-      action: PayloadAction<{ name: string; email: string; role: string }>
+      action: PayloadAction<{ name: string; email: string; role: number }>
     ) => {
       state.userInfo = action.payload;
 
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     clearUserInfo: (state) => {
-      state.userInfo = { name: "", email: "", role: "" };
+      state.userInfo = { name: "", email: "", role: 0 };
       localStorage.removeItem("userInfo");
     },
   },

@@ -15,7 +15,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
       router.push("/login");
       return;
     }
-    if (userInfo.role !== "admin") {
+    if (userInfo.role !== 2000080) {
       router.push("/");
       return;
     }

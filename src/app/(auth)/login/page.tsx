@@ -47,7 +47,7 @@ const Registration: React.FC = () => {
       setUserInfo({
         name: loginData?.payload?.name,
         email: loginData?.payload?.email,
-        role: loginData?.payload?.role,
+        role: Number(loginData?.payload?.role),
       })
     );
   }
