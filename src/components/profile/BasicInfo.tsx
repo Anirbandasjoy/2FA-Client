@@ -4,11 +4,11 @@ import Link from "next/link";
 import { FcOk } from "react-icons/fc";
 import { IoIosArrowForward } from "react-icons/io";
 import Logout from "../shared/logOut/Logout";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/app/store";
+import { useHandleGetCurrentUserQuery } from "@/redux/features/auth/authApi";
 
 export default function BasicInfo() {
-  const { userInfo } = useSelector((state: RootState) => state.userInfo);
+  const { data } = useHandleGetCurrentUserQuery();
+  const userInfo = data?.payload;
   return (
     <div className="flex items-center justify-center w-full bg-gray-900 border border-gray-700 rounded-lg shadow-lg">
       <div className=" w-11/12 py-10 ">

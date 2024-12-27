@@ -64,3 +64,19 @@ export interface logOutResponse {
   statusCode: number;
   message: string;
 }
+
+// current user types
+
+export interface currentUserResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  payload: {
+    _id: string;
+    name: string;
+    email: string;
+    role: number;
+    isActive: boolean;
+    twoFactorEnabled: boolean;
+  };
+}

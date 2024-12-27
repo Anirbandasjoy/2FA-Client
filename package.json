@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clear": "rm -rf node_modules .next yarn.lock"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",

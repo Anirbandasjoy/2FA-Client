@@ -1,23 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import { useHandleLogOutMutation } from "@/redux/features/auth/authApi";
-import { clearUserInfo } from "@/redux/features/auth/authSlice";
+import {
+  useHandleGetCurrentUserQuery,
+  useHandleLogOutMutation,
+} from "@/redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 
 const Logout = () => {
   const [logOut] = useHandleLogOutMutation();
-  const dispatch = useDispatch();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLogOut = async () => {
     try {
-      await logOut();
+      await logOut().unwrap();
       toast.success("Logged out successfully");
-      dispatch(clearUserInfo());
-      router.push("/");
+      router.push("/login");
     } catch (error: any) {
       toast.error(error?.data?.payload?.message || "Failed to log out");
       console.error("Failed to log out", error);
