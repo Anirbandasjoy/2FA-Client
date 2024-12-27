@@ -2,13 +2,11 @@
 import Loading from "@/components/auth/loading/Loading";
 import PublicRoute from "@/components/routes/PublicRoute";
 import { useHandleLoginMutation } from "@/redux/features/auth/authApi";
-import { setUserInfo } from "@/redux/features/auth/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
 
 interface FormData {
   name: string;
@@ -23,10 +21,8 @@ const Registration: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const [setLoginData, { data: loginData, isLoading }] =
-    useHandleLoginMutation();
+  const [setLoginData, { isLoading }] = useHandleLoginMutation();
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
@@ -41,16 +37,6 @@ const Registration: React.FC = () => {
       console.log("Error:", error);
     }
   };
-
-  if (loginData) {
-    dispatch(
-      setUserInfo({
-        name: loginData?.payload?.name,
-        email: loginData?.payload?.email,
-        role: Number(loginData?.payload?.role),
-      })
-    );
-  }
 
   if (isLoading) {
     return <Loading />;
