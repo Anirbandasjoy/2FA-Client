@@ -1,5 +1,6 @@
 import baseAuthApi from "@/redux/api/baseApi";
 import {
+  currentUserResponse,
   loginRequest,
   loginResponse,
   logOutResponse,
@@ -52,6 +53,9 @@ const authApi = baseAuthApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    handleGetCurrentUser: builder.query<currentUserResponse, void>({
+      query: () => "/user/current-user",
+    }),
   }),
   overrideExisting: false,
 });
@@ -62,6 +66,7 @@ export const {
   useHandleRegisterMutation,
   useHandleVerifyUserMutation,
   useHandleResendVerificationCodeMutation,
+  useHandleGetCurrentUserQuery,
 } = authApi;
 
 export default authApi;
